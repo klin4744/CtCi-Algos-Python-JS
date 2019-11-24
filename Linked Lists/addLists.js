@@ -1,4 +1,4 @@
-// Write code to addLists a linked list around a value x, such that all nodes less than x come before all nodes greater than or equal to x.
+// You have two nunbers represented by a linked list, where each node contains a single digit. The digits are stored in reverse order, such that the 1's digit is at the head of the list. Write a function that adds the two numbers and returns the sum as a linked list
 
 class LinkedListNode {
    constructor(val) {
