@@ -6,6 +6,7 @@ class LinkedListNode {
       this.next = null;
    }
 }
+
 function findIntersection(list1, list2) {
    if (!list1 || !list2) return null;
    let p1 = list1;
