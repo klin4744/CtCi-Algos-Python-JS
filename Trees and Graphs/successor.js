@@ -24,38 +24,24 @@ function inorderSuccessor(node) {
 }
 
 // Harder version => just have regular node and root node
-function inOrderSuccessor(root, node) {
-   // do dfs to do an inorder storage
-   const arr = DFSinOrder(root, node);
-   let targetIdx = 0;
-   let left = 0;
-   let right = arr.length - 1;
-   while (left < right) {
-      const middle = Math.floor((right - left) / 2) + left;
-      if (arr[middle] === node) {
-         targetIdx = middle;
-         break;
+function inorderSuccessor(root, target) {
+   let targetIdx = Infinity;
+   let idx = 0;
+   function DFSinOrder(node, arr = []) {
+      if (node.left) {
+         DFSinOrder(node.left, arr);
       }
-      if (arr[right] === node) {
-         targetIdx = right;
-         break;
+      if (node === target) {
+         targetIdx = idx;
       }
-      if (arr[middle].val < node.val) {
-         left = middle;
-      } else {
-         right = middle;
+      idx++;
+      arr.push(node);
+      if (node.right) {
+         DFSinOrder(node.right, arr);
       }
+      return arr;
    }
+   const arr = DFSinOrder(root);
    if (targetIdx + 1 >= arr.length) return null;
    return arr[targetIdx + 1];
-}
-function DFSinOrder(node, target, arr = []) {
-   if (node.left) {
-      DFSinOrder(node.left, target, arr);
-   }
-   arr.push(node);
-   if (node.right) {
-      DFSinOrder(node.right, target, arr);
-   }
-   return arr;
 }
