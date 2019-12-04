@@ -2,20 +2,11 @@ class Line {
    constructor(coor1 = [0, 0], coor2 = [0, 0]) {
       this.coor1 = coor1; // (x,y)
       this.coor2 = coor2; // (x,y)
-      this.length = this.getLength();
-   }
-   getLength() {
-      const [x1, y1] = this.coor1;
-      const [x2, y2] = this.coor2;
-      return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
    }
    getSlope() {
       const [x1, y1] = this.coor1;
       const [x2, y2] = this.coor2;
       return (y2 - y1) / (x2 - x1);
-   }
-   getYIntercept() {
-      return Math.min(coor1[1], coor2[1]);
    }
    getIntersection(line) {
       if (this.isParallel(line))
@@ -25,14 +16,18 @@ class Line {
       if (
          this.getSlope() === 0 &&
          line.coor1[0] >= Math.min(this.coor1[0], this.coor2[0]) &&
-         line.coor1[0] <= Math.max(this.coor1[0], this.coor2[0])
+         line.coor1[0] <= Math.max(this.coor1[0], this.coor2[0]) &&
+         this.coor1[1] >= Math.min(line.coor1[1], line.coor2[1]) &&
+         this.coor1[1] <= Math.max(line.coor1[1], line.coor2[1])
       ) {
          y = this.coor1[1];
          x = line.coor1[0];
       } else if (
          line.getSlope() === 0 &&
          this.coor1[0] >= Math.min(line.coor1[0], line.coor2[0]) &&
-         this.coor1[0] <= Math.max(line.coor1[0], line.coor2[0])
+         this.coor1[0] <= Math.max(line.coor1[0], line.coor2[0]) &&
+         line.coor1[1] >= Math.min(this.coor1[1], this.coor2[1]) &&
+         line.coor1[1] <= Math.max(this.coor1[1], this.coor2[1])
       ) {
          y = line.coor1[1];
          x = this.coor1[0];
@@ -64,11 +59,11 @@ function crossedWires(directions1, directions2) {
                !(x === 0 && y === 0)
             ) {
                currentMinDistance = absoluteX + absoluteY;
-               intersection = [x, y];
             }
          }
       });
    });
+
    return currentMinDistance;
 }
 function makeLines(directions, lines) {
