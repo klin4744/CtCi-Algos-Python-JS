@@ -28,9 +28,7 @@ function getDepth(node, target, depth = 0) {
 
 function firstCommonAncestor(root, node1, node2) {
    const depth1 = getDepth(root, node1);
-   console.log(depth1);
    const depth2 = getDepth(root, node2);
-   console.log(depth2);
    const difference = Math.abs(depth1 - depth2);
    if (depth1 < depth2) {
       for (let i = 0; i < difference; i++) {
