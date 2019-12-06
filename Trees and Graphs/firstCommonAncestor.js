@@ -4,35 +4,57 @@ class TreeNode {
    constructor(val) {
       this.val = val;
       this.left = this.right = null;
+      this.parent = null;
    }
 }
-// find the depth of each node via DFS,
+// find the depth of each node via DFS
 
-function getDepth(node, target) {
-   let depth = 0;
-   const queue = [];
-   queue.push(node);
-   while (queue.length) {
-      let removed = queue.shift();
-      if (removed === target) return depth;
-      if (!queue.length) {
-         depth++;
-      }
-      if (queue.left) {
-         queue.push(removed.left);
-      }
-      if (queue.right) {
-         queue.push(removed.right);
-      }
+// With parents
+
+function getDepth(node, target, depth = 0) {
+   if (!node) return -1;
+   if (node === target) return depth;
+   let left = -1,
+      right = -1;
+   if (node.left) {
+      left = getDepth(node.left, target, depth + 1);
    }
-   return depth;
+   if (node.right) {
+      right = getDepth(node.right, target, depth + 1);
+   }
+   if (left || right) return Math.max(left, right);
+   return -1;
 }
 
-function firstCommonAncestory(root, node1, node2) {}
+function firstCommonAncestor(root, node1, node2) {
+   const depth1 = getDepth(root, node1);
+   console.log(depth1);
+   const depth2 = getDepth(root, node2);
+   console.log(depth2);
+   const difference = Math.abs(depth1 - depth2);
+   if (depth1 < depth2) {
+      for (let i = 0; i < difference; i++) {
+         node2 = node2.parent;
+      }
+   } else {
+      for (let i = 0; i < difference; i++) {
+         node1 = node1.parent;
+      }
+   }
+   while (node1 !== node2) {
+      node1 = node1.parent;
+      node2 = node2.parent;
+   }
+   return node1;
+}
 
 const validTree = new TreeNode(10);
 validTree.left = new TreeNode(5);
 validTree.right = new TreeNode(12);
 validTree.right.left = new TreeNode(11);
+validTree.left.parent = validTree.right.parent = validTree;
+validTree.right.left.parent = validTree.right;
 
-console.log(getDepth(validTree, validTree.right.left));
+console.log(
+   firstCommonAncestor(validTree, validTree.right, validTree.right.left),
+);
