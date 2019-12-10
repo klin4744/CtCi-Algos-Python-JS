@@ -11,8 +11,8 @@ function BSTSequences(root) {
    const sequences = new Set();
    const originalSequence = DFS(root);
    sequences.add(originalSequence);
-   rotateIndexes(sequences, originalSequence.length);
-   return sequences;
+   const newSequences = rotateIndexes(sequences, originalSequence.length);
+   return newSequences;
 }
 function DFS(root, arr = []) {
    if (!root) return [];
@@ -27,25 +27,28 @@ function DFS(root, arr = []) {
 }
 // 1 to skip root
 function rotateIndexes(sequences, maxLength, idx = 1) {
-   if (idx >= maxLength) return sequences;
-   console.log(idx);
-   sequences.forEach(sequence => {
-      if (idx + 1 < sequence.length) {
-         const newSequence = [...sequence];
-         let temp = newSequence[idx];
-         newSequence[idx] = newSequence[idx + 1];
-         newSequence[idx + 1] = temp;
-         sequences.add(newSequence);
-      } else {
-         return sequences;
+   if (idx + 1 >= maxLength) return sequences;
+   const newSequences = new Set();
+   const previousSequences = rotateIndexes(sequences, maxLength, idx + 2);
+   previousSequences.forEach(sequence => {
+      const newSequence = [...sequence];
+      const temp = newSequence[idx];
+      newSequence[idx] = newSequence[idx + 1];
+      newSequence[idx + 1] = temp;
+      if (!newSequences.has(newSequence)) {
+         newSequences.add(newSequence);
+      }
+      if (!newSequences.has(sequence)) {
+         newSequences.add(sequence);
       }
    });
-   rotateIndexes(sequences, maxLength, idx + 2);
+   return newSequences;
 }
 
 const validTree = new TreeNode(10);
 validTree.left = new TreeNode(5);
 validTree.right = new TreeNode(12);
 validTree.right.left = new TreeNode(11);
+validTree.right.right = new TreeNode(41);
 
 console.log(BSTSequences(validTree));
